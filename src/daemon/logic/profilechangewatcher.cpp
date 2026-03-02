@@ -34,7 +34,7 @@ ProfileChangeWatcher::ProfileChangeWatcher(ProfileClient *profileClient, Prefere
     QObject(parent), _profileClient(profileClient), _restoreVolume(40), _preferences(preferences)
 {
     _currentProfile = _profileClient->getProfile();
-    _currentProfileVolume = _profileClient->getProfileVolume(currentProfile);
+    _currentProfileVolume = _profileClient->getProfileVolume(_currentProfile);
     _restoreProfile = PROFILE_GENERAL;
 
     connect(&_timer, SIGNAL(timeout()), this, SLOT(_restoreRinging()));
