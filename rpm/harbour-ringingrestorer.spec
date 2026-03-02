@@ -6,6 +6,7 @@
 Name:       harbour-ringingrestorer
 
 # >> macros
+%define _binary_payload w2.xzdio
 # << macros
 
 %{!?qtc_qmake:%define qtc_qmake %qmake}
@@ -13,7 +14,7 @@ Name:       harbour-ringingrestorer
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    RingingRestorer
-Version:    1.7
+Version:    1.8
 Release:    1
 Group:      Qt/Qt
 License:    GPLv3

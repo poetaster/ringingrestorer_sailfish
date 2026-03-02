@@ -35,6 +35,7 @@ public:
     QString getProfile() const;
     bool setProfile(const QString &profileName);
 
+    int getProfileVolume(const QString &profileName);
     bool setProfileVolume(const QString &profileName, int volume);
 
     QString getProfileType(const QString &profile) const;

@@ -90,6 +90,24 @@ ProfileClient::getProfile() const
     return profile;
 }
 
+int
+ProfileClient::getProfileVolume() const
+{
+    QDBusInterface dbus_iface(PROFILED_SERVICE, PROFILED_PATH,
+                              PROFILED_INTERFACE);
+
+    //QDBusReply<int> reply = dbus_iface.call(PROFILED_GET_PROFILE_VOLUME);
+    QDBusReply<int> reply = dbus_iface.call(PROFILED_GET_VALUE, profileName,
+                                             PROFILED_VOLUME_VALUE);
+    int profileVolume = reply.value();
+    // For testing on Desktop without profiled running
+#ifndef __arm__
+    profileVolume = 40;
+#endif
+
+    return profileVolume;
+}
+
 bool
 ProfileClient::setProfile(const QString &profileName)
 {

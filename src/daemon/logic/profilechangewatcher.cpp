@@ -52,12 +52,16 @@ ProfileChangeWatcher::profileChanged(const QString &profile) {
         return;
     }
 
-    if (_currentProfile != profile && profileLower == PROFILE_SILENT) {
+    //if ((_currentProfile != profile && profileLower == PROFILE_SILENT) {
+    int vol = _profileClient->getProfileVolume(_currentProfile);
+    if (_currentProfile != profile && 
+	    (profileLower == PROFILE_SILENT || (profileLower == PROFILE_GENERAL && vol <= 0))) {
         qDebug() << Q_FUNC_INFO << "stopping and starting timer";
         emit restoreRingingRequested();
     } else {
         qDebug() << Q_FUNC_INFO << "Changed to " << profile
                  << "which is either different than currentProfile" << _currentProfile
+                 << "or is not general profile" << PROFILE_GENERAL << "with ringing volume muted"
                  << "or is not silent profile" << PROFILE_SILENT;
     }
 
@@ -80,14 +84,20 @@ ProfileChangeWatcher::_restoreRinging() {
     }
 
     qDebug("ProfileChangeWatcher::_restoreRinging, currentProfile '%s'", qPrintable(_currentProfile));
-    if (_currentProfile.toLower() == PROFILE_SILENT) {
+    //if (_currentProfile.toLower() == PROFILE_SILENT) {
+    int vol = _profileClient->getProfileVolume(_currentProfile);
+    if ((_currentProfile.toLower() == PROFILE_SILENT) || 
+	(_currentProfile.toLower() == PROFILE_GENERAL && vol <= 0)) {
         qDebug("ProfileChangeWatcher::_restoreRinging, currentProfile '%s'", qPrintable(_currentProfile));
         _profileClient->setProfile(_restoreProfile);
         // TODO
-        _profileClient->setProfileVolume(_restoreProfile, 40);
         if (_restoreVolume > -1) {
             _profileClient->setProfileVolume(_restoreProfile, _restoreVolume);
         }
+	else {
+            _profileClient->setProfileVolume(_restoreProfile, 40);
+	}
+
 
         // TODO: notification
 //        MNotification notification(MNotification::DeviceEvent, "Ringing restored", "Ringing profile restored");
