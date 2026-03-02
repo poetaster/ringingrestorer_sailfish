@@ -32,6 +32,7 @@ class ProfileChangeWatcher : public QObject
 
     ProfileClient *_profileClient;
     QString _currentProfile;
+    int _currentProfileVolume;
     QString _restoreProfile;
     SystemAlignedTimer _timer;
     int _restoreVolume;

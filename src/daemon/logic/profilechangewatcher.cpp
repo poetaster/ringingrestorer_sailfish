@@ -34,6 +34,7 @@ ProfileChangeWatcher::ProfileChangeWatcher(ProfileClient *profileClient, Prefere
     QObject(parent), _profileClient(profileClient), _restoreVolume(40), _preferences(preferences)
 {
     _currentProfile = _profileClient->getProfile();
+    _currentProfileVolume = _profileClient->getProfileVolume(currentProfile);
     _restoreProfile = PROFILE_GENERAL;
 
     connect(&_timer, SIGNAL(timeout()), this, SLOT(_restoreRinging()));
@@ -53,9 +54,9 @@ ProfileChangeWatcher::profileChanged(const QString &profile) {
     }
 
     //if ((_currentProfile != profile && profileLower == PROFILE_SILENT) {
-    int vol = _profileClient->getProfileVolume(_currentProfile);
+    int volume = _profileClient->getProfileVolume(_currentProfile);
     if (_currentProfile != profile && 
-	    (profileLower == PROFILE_SILENT || (profileLower == PROFILE_GENERAL && vol <= 0))) {
+	    (profileLower == PROFILE_SILENT || (profileLower == PROFILE_GENERAL && volume <= 0 && _currentProfileVolume > 0))) {
         qDebug() << Q_FUNC_INFO << "stopping and starting timer";
         emit restoreRingingRequested();
     } else {
@@ -66,6 +67,7 @@ ProfileChangeWatcher::profileChanged(const QString &profile) {
     }
 
     _currentProfile = profile;
+    _currentProfileVolume = volume;
 
     // ORIGINAL harmattan version
 //    if (previousProfile.toLower() == PROFILE_RINGING && previousProfile != profile
