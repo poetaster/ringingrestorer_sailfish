@@ -91,7 +91,7 @@ ProfileClient::getProfile() const
 }
 
 int
-ProfileClient::getProfileVolume() const
+ProfileClient::getProfileVolume(const Qstring &profileName) const
 {
     QDBusInterface dbus_iface(PROFILED_SERVICE, PROFILED_PATH,
                               PROFILED_INTERFACE);
